@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
     public float maxXSpeed = 10f;
@@ -41,9 +42,7 @@ public class Movement : MonoBehaviour
 
     void Jump()
     {
-        var yMove = Input.GetAxis("Vertical");
-
-        if (grounded && Input.GetKeyDown(KeyCode.Space))
+        if (grounded && Input.GetKeyDown(KeyCode.UpArrow))
         {
             _rigidBody2D.AddForce(new Vector2(0, jumpForce));
         }
