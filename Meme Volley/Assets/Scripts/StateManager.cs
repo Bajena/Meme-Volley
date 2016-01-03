@@ -18,17 +18,13 @@ public class StateManager : MonoBehaviour {
 
     private GameState _currentState;
 
-    public void SetState(GameState newState)
-    {
-
-    }
-
     public void ResetView()
     {
         player1.GetComponent<PlayerBehavior>().Respawn();
         player2.GetComponent<PlayerBehavior>().Respawn();
-
-        ball.GetComponent<Ball>().Respawn(scoreManager.ballAt.GetComponent<PlayerBehavior>().ballRespawnPoint.transform.position);
+        ball.GetComponent<Ball>().Respawn(
+            GetPlayer(scoreManager.ballAt).ballRespawnPoint.transform.position
+        );
     }
 
 	// Use this for initialization
@@ -43,4 +39,10 @@ public class StateManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    PlayerBehavior GetPlayer(EPlayer player)
+    {
+        var playerObj = player == EPlayer.Player1 ? player1 : player2;
+        return playerObj.GetComponent<PlayerBehavior>();
+    }
 }

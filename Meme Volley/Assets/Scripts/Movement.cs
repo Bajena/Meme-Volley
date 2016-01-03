@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
+    public string jumpButton = "Jump_P1";
+    public string horizontalAxis = "Horizontal_P1";
     public float maxXSpeed = 10f;
     public float jumpForce = 300f;
     public Transform groundCheck;
@@ -24,7 +26,7 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-        var xMove = Input.GetAxis("Horizontal");
+        var xMove = Input.GetAxis(horizontalAxis);
 
         
         if (xMove > 0 && !facingRight || xMove < 0 && facingRight)
@@ -42,7 +44,7 @@ public class Movement : MonoBehaviour
 
     void Jump()
     {
-        if (grounded && Input.GetKeyDown(KeyCode.UpArrow))
+        if (grounded && Input.GetButtonDown(jumpButton))
         {
             _rigidBody2D.AddForce(new Vector2(0, jumpForce));
         }

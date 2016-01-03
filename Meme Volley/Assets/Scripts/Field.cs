@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Field : MonoBehaviour {
-    public GameObject player;
+    public EPlayer player;
 
 	// Use this for initialization
 	void Start () {
@@ -18,8 +18,7 @@ public class Field : MonoBehaviour {
     {
         if (other.gameObject.tag == "Ball")
         {
-            StateManager.Instance.ResetView();
-            
+            StateManager.Instance.scoreManager.PointLost(player);
         }
     }
 }

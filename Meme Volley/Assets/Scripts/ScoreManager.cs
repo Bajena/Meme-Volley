@@ -1,18 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public GameObject ballAt;
-    public GUIText scoreText;
+    public UnityEngine.UI.Text scoreText;
+    public EPlayer ballAt;
 
-    private int player1Score = 0;
-    private int player2Score = 0;
+    private Dictionary<EPlayer, int> _score;
 
     public void Reset()
     {
-        player1Score = 0;
-        player2Score = 0;
-        SetScoreText();
+        _score = new Dictionary<EPlayer, int>();
+        _score[EPlayer.Player1] = 0;
+        _score[EPlayer.Player2] = 0;
+        UpdateScoreText();
+    }
+
+    public void PointLost(EPlayer player)
+    {
+        _score[OtherPlayer(player)]++;
+        ballAt = OtherPlayer(player);
+        UpdateScoreText();
+        StateManager.Instance.ResetView();
     }
 
     // Use this for initialization
@@ -27,8 +36,14 @@ public class ScoreManager : MonoBehaviour
 
     }
 
-    void SetScoreText()
+    void UpdateScoreText()
     {
-        scoreText.text = "Score: " + player1Score + "-" + player2Score;
+        
+        scoreText.text = "Score: " + _score[EPlayer.Player1] + "-" + _score[EPlayer.Player2];
+    }
+
+    EPlayer OtherPlayer(EPlayer player)
+    {
+        return player == EPlayer.Player1 ? EPlayer.Player2 : EPlayer.Player1;
     }
 }
