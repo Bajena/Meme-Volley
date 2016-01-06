@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using UnityEngine.Events;
 
 public class StateManager : MonoBehaviour {
     public static StateManager Instance;
@@ -27,12 +29,30 @@ public class StateManager : MonoBehaviour {
         );
     }
 
-	// Use this for initialization
-	void Start () {
-        Instance = this;
+    public void GameOver(EPlayer ballAt)
+    {
+        player1.SetActive(false);
+        player2.SetActive(false);
+        ball.SetActive(false);
+        ModalDialog.Instance.Choice("Game over", "Rematch", "Menu", new UnityAction(Initialize), new UnityAction(() => { }));
+    }
+
+    public void Initialize()
+    {
         _currentState = GameState.Serve;
         scoreManager.Reset();
+
+        player1.SetActive(true);
+        player2.SetActive(true);
+        ball.SetActive(true);
         ResetView();
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        Instance = this;
+        Initialize();
 	}
 	
 	// Update is called once per frame

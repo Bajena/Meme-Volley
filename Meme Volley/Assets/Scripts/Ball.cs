@@ -39,4 +39,13 @@ public class Ball : MonoBehaviour {
             isSleeping = false;
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        var field= other.gameObject.GetComponent<Field>();
+        if (field != null)
+        {
+            StateManager.Instance.scoreManager.PointLost(field.player);
+        }
+    }
 }

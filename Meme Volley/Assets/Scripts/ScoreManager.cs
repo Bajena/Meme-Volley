@@ -4,7 +4,8 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public UnityEngine.UI.Text scoreText;
-    public EPlayer ballAt;
+    public EPlayer ballAt = EPlayer.Player1;
+    public int maxPoints = 21;
 
     private Dictionary<EPlayer, int> _score;
 
@@ -22,6 +23,11 @@ public class ScoreManager : MonoBehaviour
         ballAt = OtherPlayer(player);
         UpdateScoreText();
         StateManager.Instance.ResetView();
+
+        if (IsPlayerWinner(ballAt))
+        {
+            StateManager.Instance.GameOver(ballAt);
+        }
     }
 
     // Use this for initialization
@@ -45,5 +51,10 @@ public class ScoreManager : MonoBehaviour
     EPlayer OtherPlayer(EPlayer player)
     {
         return player == EPlayer.Player1 ? EPlayer.Player2 : EPlayer.Player1;
+    }
+
+    bool IsPlayerWinner(EPlayer player)
+    {
+        return _score[player] >= maxPoints && _score[player] - _score[OtherPlayer(player)] >= 2;
     }
 }
