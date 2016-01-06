@@ -8,8 +8,8 @@ public class StateManager : MonoBehaviour {
 
     public enum GameState
     {
-        Serve,
         Action,
+        Pause,
         End
     }
 
@@ -31,15 +31,16 @@ public class StateManager : MonoBehaviour {
 
     public void GameOver(EPlayer ballAt)
     {
+        _currentState = GameState.End;
         player1.SetActive(false);
         player2.SetActive(false);
         ball.SetActive(false);
-        ModalDialog.Instance.Choice("Game over", "Rematch", "Menu", new UnityAction(Initialize), new UnityAction(() => { }));
+        ModalDialog.Instance.Choice("Game over", "Rematch", "Quit", new UnityAction(Initialize), new UnityAction(QuitGame));
     }
 
     public void Initialize()
     {
-        _currentState = GameState.Serve;
+        _currentState = GameState.Action;
         scoreManager.Reset();
 
         player1.SetActive(true);
@@ -57,8 +58,29 @@ public class StateManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    if (Input.GetButtonDown("Cancel") && _currentState == GameState.Action)
+        {
+            PauseGame();
+        }
 	}
+
+    void PauseGame()
+    {
+        Time.timeScale = 0;
+        _currentState = GameState.Pause;
+        ModalDialog.Instance.Choice("Game paused", "Resume", "Exit", new UnityAction(ResumeGame), new UnityAction(QuitGame));
+    }
+
+    void ResumeGame()
+    {
+        Time.timeScale = 1;
+        _currentState = GameState.Action;
+    }
+
+    void QuitGame()
+    {
+        Application.Quit();
+    }
 
     PlayerBehavior GetPlayer(EPlayer player)
     {

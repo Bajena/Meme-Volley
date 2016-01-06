@@ -18,12 +18,7 @@ public class Ball : MonoBehaviour {
         isSleeping = true;
         gameObject.transform.position = respawnPoint;
     }
-
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
+    
 	// Update is called once per frame
 	void FixedUpdate () {
 	    if (isSleeping)

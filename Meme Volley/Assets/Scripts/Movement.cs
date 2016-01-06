@@ -1,60 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class Movement : MonoBehaviour
+public class Movement : BaseMovement
 {
     public string jumpButton = "Jump_P1";
     public string horizontalAxis = "Horizontal_P1";
-    public float maxXSpeed = 10f;
-    public float jumpForce = 300f;
-    public Transform groundCheck;
-    public LayerMask whatIsGround;
 
-    bool facingRight = true;
-    float groundRadius = 0.2f;
-    bool grounded = true;
-    
-    private Rigidbody2D _rigidBody2D
+    internal override float CalculateXMove()
     {
-        get
-        {
-            return GetComponent<Rigidbody2D>();
-        }
-    }
-	
-    void FixedUpdate()
-    {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-        var xMove = Input.GetAxis(horizontalAxis);
-
-        
-        if (xMove > 0 && !facingRight || xMove < 0 && facingRight)
-        {
-            Flip();
-        }
-
-        _rigidBody2D.velocity = new Vector2(xMove * maxXSpeed, _rigidBody2D.velocity.y);
+        return Input.GetAxis(horizontalAxis);
     }
 
-    void Update()
+    internal override bool ShouldJump()
     {
-        Jump();
-    }
-
-    void Jump()
-    {
-        if (grounded && Input.GetButtonDown(jumpButton))
-        {
-            _rigidBody2D.AddForce(new Vector2(0, jumpForce));
-        }
-    }
-
-    void Flip()
-    {
-        facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        return Input.GetButtonDown(jumpButton);
     }
 }
